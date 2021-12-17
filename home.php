@@ -9,25 +9,43 @@ if(isset($_POST['logout'])){
     session_destroy();
     header("Location: index.php");
  }
+
  $booknameerr ='';
  $Authorerr ='';
+ $placeerr ="";
 
- if(isset($_POST['AddBook'])){
+ if(isset($_POST['book'])){
     $name = $_POST['bookname'];
-    $author = $_POST['Author'];
-    $pages = $_POST['pages'];
-    $date = $_POST['date'];
+    $number = $_POST['number'];
+    $place = $_POST['place'];
     $user_id = $_SESSION['id'];
     if($name == ''){
-        $booknameerr = "<p class='red-text lighten-4'>Book name is required</p>";
+        $booknameerr = "<p class='red-text lighten-4'> name is required</p>";
     }
-    if($author == ''){
-        $Authorerr = "<p class='red-text lighten-4'>author is required</p>";
+    if($number == ''){
+        $Authorerr = "<p class='red-text lighten-4'>Number is required</p>";
+    }
+    if($place == ''){
+        $placeerr = "<p class='red-text lighten-4'>place is required</p>";
     }
    
     if( $booknameerr == null && $Authorerr == null){
-        $sql = "INSERT INTO `books` (`user_id` , `name` , `author` , `pages` , `date`) Values ('$user_id' , '$name' , '$author' , '$pages' , '$date')";
+        $sql = "INSERT INTO `books` ( `name`, `number` , `place` , `user_id`) VALUES ('$name', '$number', '$place' , '$user_id')";
+
+        
         if(mysqli_query($conn , $sql)){
+            $sql2 = "SELECT size FROM transport WHERE 'number' = '$number'";
+            $result = $conn->query($sql2);
+    
+            if ($result->num_rows > 0) {
+                // output data of each row
+                while($row = $result->fetch_assoc()) {
+                    $siz = $row['size'] + 1;
+                    $sql3 = "UPDATE `transport` SET `size` = '$siz'";
+                    $conn->query($sql3);
+                }
+            }
+
             header("Location: books.php");
         }
     }
@@ -48,11 +66,10 @@ if(isset($_POST['logout'])){
 </head>
 <body>
     <nav class=" indigo lighten-3">
-        <a href="books.php" class="brand-logo marginleft">my-Books</a>
+        <a href="books.php" class="brand-logo marginleft">Trans</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             
-            <li><a href="home.php">add book</a></li>
-            <li><a href="books.php">Books</a></li>
+            <li><a href="home.php">Book A Ticket </a></li>
             <li>
                 <form  method="POST">
                     <button name="logout" class="marginright btn indigo lighten-1" type="submit" >Log out</button>
@@ -64,36 +81,28 @@ if(isset($_POST['logout'])){
     <div class="row margintop">
     <div class="col s1 m3 l4"></div>
     <form method="POST" class="col s10 m6 l4 card">
-        <h5 class="center-align indigo-text">New Book</h5>
+        <h5 class="center-align indigo-text"> Book A Ticket</h5>
       <div class="row ">
-        <div class="input-field col s6">
+        <div class="input-field col s12">
           <input name="bookname"  id="bookname" type="text">
-          <label for="bookname">Book Name</label>
+          <label for="bookname">Your Name</label>
           <?php if(isset( $booknameerr)){echo $booknameerr;} ?>
         </div>
-        <div class="input-field col s6">
-          <input name="Author" id="Author" type="text">
-          <label for="Author">Author</label>
+        <div class="input-field col s12">
+          <input name="number" id="Author" type="text">
+          <label for="Author">Trans Number</label>
           <?php if(isset( $Authorerr)){echo $Authorerr;} ?>
         </div>
-      </div>
-     
-      <div class="row">
         <div class="input-field col s12">
-          <input name="pages" id="pages" type="number">
-          <label for="pages">pages</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input name="date" id="date" type="date">
-          <label for="date">date</label>
+          <input name="place" id="place" type="text">
+          <label for="place">Place</label>
+          <?php if(isset( $placeerr)){echo $placeerr;} ?>
         </div>
       </div>
       <div class="row">
           <div class="col s5"></div>
           <div class="col s2">
-              <button name="AddBook" type="submit" class="btn indigo lighten-2">Add Book</button>
+              <button name="book" type="submit" class="btn indigo lighten-2">Book </button>
           </div>
           <div class="col s5"></div>
       </div>

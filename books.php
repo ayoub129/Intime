@@ -11,15 +11,6 @@ if(isset($_POST['logout'])){
     header("Location: index.php");
 }
 
- if(isset($_POST['edit'])){
-     $editid=$_POST['editid'];
-     $read = $_POST['read'];
-    $sql = "UPDATE `books` SET `reading` = '$read' WHERE `books`.`id`='$editid'";
-    if(mysqli_query($conn , $sql)){
-        header("Location: books.php");
-    }
-}
-
 if(isset($_POST['deletBook'])){
     $idtodelete = $_POST["id"];
     $sql = "DELETE FROM `books`  WHERE `id`= '$idtodelete'";
@@ -40,12 +31,11 @@ if(isset($_POST['deletBook'])){
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <nav class=" indigo lighten-3">
-        <a href="books.php" class="brand-logo marginleft">my-Books</a>
+<nav class=" indigo lighten-3">
+        <a href="books.php" class="brand-logo marginleft">Trans</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             
-            <li><a href="home.php">add book</a></li>
-            <li><a href="books.php">Books</a></li>
+            <li><a href="home.php">Book A Ticket </a></li>
             <li>
                 <form  method="POST">
                     <button name="logout" class="marginright btn indigo lighten-1" type="submit" >Log out</button>
@@ -54,40 +44,15 @@ if(isset($_POST['deletBook'])){
         </ul>
     </nav>
     <div class="row margintop">
-    <?php  if(isset($_POST['editBook'])){?>
-        <div class="col s1 m3 l4"></div>
-            <form method="POST" class="col s10 m6 l4 card">
-                <h5 class="center-align indigo-text">Edit Book</h5>
-            <div class="row ">
-                <div class="input-field col s12">
-                <input name="read"  id="read" type="number" value="<?php echo $_POST['name']; ?>">
-                <input name="editid"  id="editid" type="hidden" value="<?php echo $_POST['id']; ?>">
-                <label for="read">reading</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s5"></div>
-                <div class="col s2">
-                    <button name="edit" type="submit" class="btn indigo lighten-2">Edit Book</button>
-                </div>
-                <div class="col s5"></div>
-            </div>
-            </form>
-         <div class="col s1 m3 l4"></div>
-      <?php } ?>
-    </div>
-    <div class="row margintop">
         <div class="col s1  "></div>
         <div class="col s10  ">
             <table class="centered responsive-table highlight striped">
                 <thead>
                     <tr>
                         <th>name</th>
-                        <th>author</th>
-                        <th>page</th>
-                        <th>date</th>
-                        <th>reading</th>
-                        <th>status</th>
+                        <th>Number</th>
+                        <th>size</th>
+                        <th>Time Left</th>
                         <th>actions</th>
                     </tr>
                 </thead>
@@ -95,36 +60,25 @@ if(isset($_POST['deletBook'])){
                     <?php    
                     $sql = "SELECT * FROM books WHERE `user_id` = '$user_id'";
                     $result = mysqli_query($conn , $sql);
-                    while($row = mysqli_fetch_assoc($result)){?>
+                    while($row = mysqli_fetch_assoc($result)){
+                        $num = $row['number'];
+                        $sql2 = "SELECT * FROM transport WHERE `number` = '$num'";
+                        $result2 = mysqli_query($conn , $sql2);
+                        while($row2 = mysqli_fetch_assoc($result2)){
+                        ?>
                                 <tr>
                                     <td><?php echo $row['name']; ?></td>
-                                    <td><?php echo $row['author']; ?></td>
-                                    <td><?php echo $row['pages']; ?></td>
-                                    <td><?php echo $row['date']; ?></td>
-                                    <td><?php echo $row['reading']; ?></td>
-                                    <td><?php
-                                     if($row['reading'] == $row['pages']){ echo " <button  class='btn green darken-2  waves-effect waves-light'>Finished </button>";}
-                                       else if ($row['reading'] < $row['pages']){ echo " <button  class='btn yellow darken-2  waves-effect waves-light'>reading </button>";}
-                                        else {echo " <button  class='btn red darken-2  waves-effect waves-light'>something wrong</button>";}
-                                     ?></td>
+                                    <td><?php echo $row['number']; ?></td>
+                                    <td><?php echo $row2['size']; ?></td>
                                     <td>
                                         <form method="POST">
                                             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                            <input type="hidden" name="name" value="<?php echo $row['reading']; ?>">
-                                            <button type='submit' name="editBook" class="btn yellow darken-2  waves-effect waves-light">
-                                                    Edit
-                                            </button>
                                             <button type='submit' name="deletBook" class="btn red darken-1">Delete</button>
-                                            <button class="btn white darken-1">
-                                                <a href="dashboard.php?id=<?php echo $row['id']; ?>">
-                                                    more
-                                                </a>
-                                         </button>
                                         </form>
                                     </td>
                                 </tr>
             
-                    <?php  } ?>
+                    <?php  } }?>
                 </tbody>
             </table>
 

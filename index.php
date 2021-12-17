@@ -29,16 +29,31 @@
 
     // query
     if(  $passworderr == '' && $emailerr == ''){
-        $sql = "SELECT * FROM `users` WHERE `email`='$email' AND  `password`='$password'";
+        $sql = "SELECT * FROM `users` WHERE `email`='$email' AND  `password`='$password' AND `isAdmin` = 'admin'";
         $result = mysqli_query($conn , $sql);
         $count = mysqli_num_rows($result);
 
         if($count = 1){
            while($row = mysqli_fetch_assoc($result)){
             $_SESSION['id'] = $row['id'];
+            header("Location: dashboard.php");
+            }
+        } 
+        
+
+        $sql2 = "SELECT * FROM `users` WHERE `email`='$email' AND  `password`='$password'";
+        $result2 = mysqli_query($conn , $sql2);
+        $count2 = mysqli_num_rows($result2);
+
+        if($count2 = 1){
+           while($row2 = mysqli_fetch_assoc($result2)){
+            $_SESSION['id'] = $row2['id'];
             header("Location: books.php");
             }
-        } else {
+        } 
+
+
+        else {
             $err = "<p class='red-text lighten-4'>email or password is wrong </p>";
         }
 
