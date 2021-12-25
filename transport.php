@@ -10,33 +10,25 @@ if(isset($_POST['logout'])){
     header("Location: index.php");
  }
 
- $placeerr ='';
  $Authorerr ='';
  $maxerr ='';
- $timeerr ='';
 
  if(isset($_POST['Add'])){
-    $place = $_POST['place'];
     $number = $_POST['number'];
     $max = $_POST['max'];
-    $time = $_POST['time'];
-    if($place == ''){
-        $placeerr = "<p class='red-text lighten-4'> place is required</p>";
-    }
+  
     if($number == ''){
         $Authorerr = "<p class='red-text lighten-4'>Number is required</p>";
     }
     if($max == ''){
         $maxerr = "<p class='red-text lighten-4'>max is required</p>";
     }
-    if($time == ''){
-        $timeerr = "<p class='red-text lighten-4'>time is required</p>";
-    }
+  
    
-    if( $placeerr == null && $Authorerr == null && $timeerr == null && $maxerr ==null){
-        $sql = "INSERT INTO `transport` ( `max`, `number`) VALUES ('$max', '$number')";
-        $sql2 = "INSERT INTO `places` ( `place`, `number_trans` , `time`) VALUES ('$place', '$number' , '$time')";
-        if(mysqli_query($conn , $sql) && mysqli_query($conn , $sql2)){
+    if(  $Authorerr == null  && $maxerr ==null){
+        $sql = "INSERT INTO transport ( `max`, `number` , `size`) VALUES ('$max', '$number' , 0)";
+        $sql2 = "INSERT INTO places ( `place`, `number_trans`) VALUES (1, '$number')";
+        if(mysqli_query($conn , $sql) && mysqli_query($conn , $sql2) ){
             header("Location: dashboard.php");
         }
     }
@@ -57,7 +49,7 @@ if(isset($_POST['logout'])){
 </head>
 <body>
      <nav class=" indigo lighten-3">
-            <a href="dashboard.php" class="brand-logo marginleft">Trans</a>
+            <a href="dashboard.php" class="brand-logo marginleft">InTime</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 
                 <li><a href="transport.php">Add Trans </a></li>
@@ -75,11 +67,6 @@ if(isset($_POST['logout'])){
         <h5 class="center-align indigo-text"> Add Transport </h5>
       <div class="row ">
         <div class="input-field col s12">
-          <input name="place"  id="place" type="text">
-          <label for="place">place</label>
-          <?php if(isset( $placeerr)){echo $placeerr;} ?>
-        </div>
-        <div class="input-field col s12">
           <input name="number" id="Author" type="text">
           <label for="Author">Trans Number</label>
           <?php if(isset( $Authorerr)){echo $Authorerr;} ?>
@@ -88,11 +75,6 @@ if(isset($_POST['logout'])){
           <input name="max"  id="max" type="text">
           <label for="max">Maximun</label>
           <?php if(isset( $maxerr)){echo $maxerr;} ?>
-        </div>
-        <div class="input-field col s12">
-          <input name="time" id="time" type="time">
-          <label for="time">Time</label>
-          <?php if(isset( $timeerr)){echo $timeerr;} ?>
         </div>
       </div>
       <div class="row">

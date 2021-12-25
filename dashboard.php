@@ -11,22 +11,15 @@ if(isset($_POST['logout'])){
     header("Location: index.php");
 }
 
- if(isset($_POST['edit'])){
-     $editid=$_POST['editid'];
-     $read = $_POST['read'];
-    $sql = "UPDATE `books` SET `reading` = '$read' WHERE `books`.`id`='$editid'";
-    if(mysqli_query($conn , $sql)){
-        header("Location: books.php");
-    }
-}
 
 if(isset($_POST['deletBook'])){
     $idtodelete = $_POST["id"];
-    $sql = "DELETE FROM `transport`  WHERE `number`= '$idtodelete'";
-    $sql = "DELETE FROM `places`  WHERE `number_trans`= '$idtodelete'";
-    $result = mysqli_query($conn , $sql);
-
+    $time =  date("h:i:s");
+    $sql2 = "UPDATE `places` SET `time` = '$time' WHERE `places`.`number_trans` = '$idtodelete'";
+   mysqli_query($conn , $sql2); 
 }
+
+
 
 ?>
 <!DOCTYPE html>
@@ -42,7 +35,7 @@ if(isset($_POST['deletBook'])){
 </head>
 <body>
     <nav class=" indigo lighten-3">
-        <a href="dashboard.php" class="brand-logo marginleft">Trans</a>
+        <a href="dashboard.php" class="brand-logo marginleft">InTime</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             
             <li><a href="transport.php">Add Trans </a></li>
@@ -54,19 +47,19 @@ if(isset($_POST['deletBook'])){
         </ul>
     </nav>
     <div class="row margintop">
+        </div>
     </div>
     <div class="row margintop">
         <div class="col s1  "></div>
         <div class="col s10  ">
-            <table class="centered responsive-table highlight striped">
+            <table class="centered responsive-table highlight striped indigo  white-text">
                 <thead>
                     <tr>
                         <th>Number</th>
                         <th>Maximum</th>
-                        <th>place</th>
                         <th>Size</th>
-                        <th>status</th>
                         <th>Action</th>
+                        <th>status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,24 +72,27 @@ if(isset($_POST['deletBook'])){
                         $result2 = mysqli_query($conn , $sql2);
                         while($row2 = mysqli_fetch_assoc($result2)){
                         ?>
+                       
                                 <tr>
                                     <td><?php echo $row['number']; ?></td>
                                     <td><?php echo $row['max']; ?></td>
-                                    <td><?php echo $row2['place']; ?></td>
                                     <td><?php echo $row['size']; ?></td>
-                                    <td><?php
-                                     if($row['size'] == $row['max']){ echo " <button  class='btn green darken-2  waves-effect waves-light'>Plan </button>";}
-                                       else if ($row['size'] < $row['max']){ echo " <button  class='btn yellow darken-2  waves-effect waves-light'>Still </button>";}
-                                        else {echo " <button  class='btn red darken-2  waves-effect waves-light'>something wrong</button>";}
-                                     ?></td>
+                                   
                                     <td>
-                                        <form method="POST">
+                                        <form method="POST" >
                                             <input type="hidden" name="id" value="<?php echo $row['number']; ?>">
-                                            <button type='submit' name="deletBook" class="btn red darken-1">Delete</button>
+                                            <button type='submit' name="deletBook" class="btn send waves-effect waves-light red darken-1" >
+                                                send 
+                                            </button>
                                         </form>
                                     </td>
+                                            <td><?php
+                                             if($row['size'] == $row['max']){ echo " <button  class='btn blue darken-2  waves-effect waves-light'>Full </button>";}
+                                             else if ($row['size'] < $row['max']){ echo " <button  class='btn green darken-2  waves-effect waves-light'>Still Places </button>";}
+                                             else {echo " <button  class='btn red darken-2  waves-effect waves-light'>something wrong</button>";}
+                                             ?>
+                                             </td>
                                 </tr>
-            
                     <?php } }?>
                 </tbody>
             </table>
@@ -109,5 +105,6 @@ if(isset($_POST['deletBook'])){
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

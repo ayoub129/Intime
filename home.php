@@ -1,56 +1,46 @@
 <?php
  require_once('config.php');
  session_start();
- if($_SESSION['id'] === null){
-    header("Location: index.php");
-}
 
-if(isset($_POST['logout'])){
-    session_destroy();
-    header("Location: index.php");
- }
 
- $booknameerr ='';
  $Authorerr ='';
  $placeerr ="";
 
  if(isset($_POST['book'])){
-    $name = $_POST['bookname'];
     $number = $_POST['number'];
     $place = $_POST['place'];
-    $user_id = $_SESSION['id'];
-    if($name == ''){
-        $booknameerr = "<p class='red-text lighten-4'> name is required</p>";
-    }
+
+   
     if($number == ''){
         $Authorerr = "<p class='red-text lighten-4'>Number is required</p>";
     }
     if($place == ''){
         $placeerr = "<p class='red-text lighten-4'>place is required</p>";
     }
-   
-    if( $booknameerr == null && $Authorerr == null){
-        $sql = "INSERT INTO `books` ( `name`, `number` , `place` , `user_id`) VALUES ('$name', '$number', '$place' , '$user_id')";
-
-        
-        if(mysqli_query($conn , $sql)){
-            $sql2 = "SELECT size FROM transport WHERE 'number' = '$number'";
-            $result = $conn->query($sql2);
     
-            if ($result->num_rows > 0) {
-                // output data of each row
-                while($row = $result->fetch_assoc()) {
-                    $siz = $row['size'] + 1;
-                    $sql3 = "UPDATE `transport` SET `size` = '$siz'";
-                    $conn->query($sql3);
-                }
-            }
+    if(  $Authorerr == null && $placeerr == null){
 
-            header("Location: books.php");
+        $sql2 = "SELECT * FROM transport WHERE `number` = '$number'";
+        $result = mysqli_query($conn , $sql2);
+        while($row = mysqli_fetch_assoc($result)){
+                if( $row['size'] < $row['max'] ) {
+                    $siz =  $row['size'] + 1;
+                    $sql3 = "UPDATE `transport` SET `size` = '$siz' WHERE `number` = '$number'";
+                    $sql = "INSERT INTO `books` (  `number` , `place` ) VALUES ( '$number', '$place')";
+                    if(mysqli_query($conn,$sql3) && mysqli_query($conn,$sql)){
+                        header("Location: books.php");
+                    }
+                } 
+                else {
+                    $sql = "INSERT INTO `books` (  `number` , `place` ) VALUES ( '$number', '$place')";
+                    if(mysqli_query($conn , $sql)){
+                        header("Location: books.php");
+                    }
+                }
         }
     }
+    }
   
- }
 ?>
 
 <!DOCTYPE html>
@@ -66,15 +56,12 @@ if(isset($_POST['logout'])){
 </head>
 <body>
     <nav class=" indigo lighten-3">
-        <a href="books.php" class="brand-logo marginleft">Trans</a>
+        <a href="books.php" class="brand-logo marginleft">InTime</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             
             <li><a href="home.php">Book A Ticket </a></li>
-            <li>
-                <form  method="POST">
-                    <button name="logout" class="marginright btn indigo lighten-1" type="submit" >Log out</button>
-                </form>
-            </li>
+            <li><a href="index.php">Admin </a></li>
+           
         </ul>
     </nav>
 
@@ -83,15 +70,17 @@ if(isset($_POST['logout'])){
     <form method="POST" class="col s10 m6 l4 card">
         <h5 class="center-align indigo-text"> Book A Ticket</h5>
       <div class="row ">
-        <div class="input-field col s12">
-          <input name="bookname"  id="bookname" type="text">
-          <label for="bookname">Your Name</label>
-          <?php if(isset( $booknameerr)){echo $booknameerr;} ?>
-        </div>
-        <div class="input-field col s12">
-          <input name="number" id="Author" type="text">
-          <label for="Author">Trans Number</label>
-          <?php if(isset( $Authorerr)){echo $Authorerr;} ?>
+      <div class="input-field col s12">
+            <select name="number">
+                <option value="" disabled selected>Choose your Trans</option>
+               <?php
+                 $sql = "SELECT * FROM `transport`";
+                 $result = mysqli_query($conn , $sql);
+                 while ($row = mysqli_fetch_assoc($result)) { ?>
+                    <option value="<?php echo $row['number'] ?>"><?php echo $row['number'] ?></option>
+                <?php }        ?>
+            </select>
+            <?php if(isset( $Authorerr)){echo $Authorerr;} ?>
         </div>
         <div class="input-field col s12">
           <input name="place" id="place" type="text">
@@ -114,5 +103,6 @@ if(isset($_POST['logout'])){
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

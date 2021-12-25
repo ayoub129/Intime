@@ -1,23 +1,6 @@
 <?php   
 require_once('config.php');
 session_start();
-$user_id = $_SESSION['id'];
-if($_SESSION['id'] === null){
-    header("Location: index.php");
-}
-
-if(isset($_POST['logout'])){
-    session_destroy();
-    header("Location: index.php");
-}
-
-if(isset($_POST['deletBook'])){
-    $idtodelete = $_POST["id"];
-    $sql = "DELETE FROM `books`  WHERE `id`= '$idtodelete'";
-    $result = mysqli_query($conn , $sql);
-
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,15 +15,11 @@ if(isset($_POST['deletBook'])){
 </head>
 <body>
 <nav class=" indigo lighten-3">
-        <a href="books.php" class="brand-logo marginleft">Trans</a>
+        <a href="books.php" class="brand-logo marginleft">InTime</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             
             <li><a href="home.php">Book A Ticket </a></li>
-            <li>
-                <form  method="POST">
-                    <button name="logout" class="marginright btn indigo lighten-1" type="submit" >Log out</button>
-                </form>
-            </li>
+            <li><a href="index.php">Admin </a></li>
         </ul>
     </nav>
     <div class="row margintop">
@@ -49,16 +28,16 @@ if(isset($_POST['deletBook'])){
             <table class="centered responsive-table highlight striped">
                 <thead>
                     <tr>
-                        <th>name</th>
                         <th>Number</th>
                         <th>size</th>
-                        <th>Time Left</th>
-                        <th>actions</th>
+                        <th>place</th>
+                        <th>expected time</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php    
-                    $sql = "SELECT * FROM books WHERE `user_id` = '$user_id'";
+                    $sql = "SELECT * FROM books";
                     $result = mysqli_query($conn , $sql);
                     while($row = mysqli_fetch_assoc($result)){
                         $num = $row['number'];
@@ -67,14 +46,33 @@ if(isset($_POST['deletBook'])){
                         while($row2 = mysqli_fetch_assoc($result2)){
                         ?>
                                 <tr>
-                                    <td><?php echo $row['name']; ?></td>
                                     <td><?php echo $row['number']; ?></td>
                                     <td><?php echo $row2['size']; ?></td>
+                                    <td><?php echo $row['place']; ?></td>
                                     <td>
-                                        <form method="POST">
-                                            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                            <button type='submit' name="deletBook" class="btn red darken-1">Delete</button>
-                                        </form>
+                                        <?php 
+                                         $sql3 = "SELECT * FROM places WHERE `number_trans` = '$num'";
+                                         $result3 = mysqli_query($conn , $sql3);
+                                         while($row3 = mysqli_fetch_assoc($result3)){ 
+                                            $time_start = $row3['time'];
+                                            $place = $row['place'];
+                                            if($place == 1) {
+                                                $endTime = strtotime("+15 minutes", strtotime($time_start));
+                                                echo date('h:i:s', $endTime);
+                                            } else if ($place == 2) {
+                                                $endTime = strtotime("+30 minutes", strtotime($time_start));
+                                                echo date('h:i:s', $endTime);
+                                            } else {
+                                                $endTime = strtotime("+45 minutes", strtotime($time_start));
+                                                echo date('h:i:s', $endTime);
+                                            }
+                                         }
+                                        ?>
+                                    </td>
+                                    <td>
+                                       <div >
+                                            <a href="paper.php?id=<?php echo $row['id']; ?>" class="btn green darken-1">print</a>
+                                        </div>
                                     </td>
                                 </tr>
             
@@ -90,5 +88,6 @@ if(isset($_POST['deletBook'])){
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
 </body>
 </html>

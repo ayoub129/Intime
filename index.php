@@ -2,7 +2,7 @@
     session_start();
     
         if(isset($_SESSION['id']) && $_SESSION['id'] != ''){
-            header("Location: books.php");
+            header("Location: dashboard.php");
     }
     // database config
      require_once('config.php');
@@ -39,25 +39,9 @@
             header("Location: dashboard.php");
             }
         } 
-        
-
-        $sql2 = "SELECT * FROM `users` WHERE `email`='$email' AND  `password`='$password'";
-        $result2 = mysqli_query($conn , $sql2);
-        $count2 = mysqli_num_rows($result2);
-
-        if($count2 = 1){
-           while($row2 = mysqli_fetch_assoc($result2)){
-            $_SESSION['id'] = $row2['id'];
-            header("Location: books.php");
-            }
-        } 
-
-
         else {
             $err = "<p class='red-text lighten-4'>email or password is wrong </p>";
         }
-
-  
     }
 
 
@@ -105,7 +89,7 @@
           </div>
           <div class="col s5"></div>
       </div>
-      <p> Don't have an account ? <a href="register.php">Register</a>  </p>
+      <p> You Want A Ticket  ? <a href="home.php">Book Now</a>  </p>
     </form>
     <div class="col s1 m3 l4"></div>
   </div>
