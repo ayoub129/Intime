@@ -84,6 +84,7 @@ if(isset($_POST['deletBook'])){
                                             <button type='submit' name="deletBook" class="btn send waves-effect waves-light red darken-1" >
                                                 send 
                                             </button>
+                                            <a href="books.php?id=<?php echo $row['number'] ?>" class="btn blue-text waves-effect waves-light white darken-1" >more</a>
                                         </form>
                                     </td>
                                             <td><?php

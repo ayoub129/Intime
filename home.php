@@ -28,7 +28,7 @@
                     $sql3 = "UPDATE `transport` SET `size` = '$siz' WHERE `number` = '$number'";
                     $sql = "INSERT INTO `books` (  `number` , `place` ) VALUES ( '$number', '$place')";
                     if(mysqli_query($conn,$sql3) && mysqli_query($conn,$sql)){
-                        header("Location: books.php");
+                        header("Location: paper.php");
                     }
                 } 
                 else {
@@ -56,7 +56,7 @@
 </head>
 <body>
     <nav class=" indigo lighten-3">
-        <a href="books.php" class="brand-logo marginleft">InTime</a>
+        <a href="#" class="brand-logo marginleft">InTime</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             
             <li><a href="home.php">Book A Ticket </a></li>

@@ -1,6 +1,18 @@
 <?php   
 require_once('config.php');
+
 session_start();
+$user_id = $_SESSION['id'];
+if($_SESSION['id'] === null){
+    header("Location: index.php");
+}
+
+if(isset($_POST['logout'])){
+    session_destroy();
+    header("Location: index.php");
+}
+
+$id = $_GET['id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +27,7 @@ session_start();
 </head>
 <body>
 <nav class=" indigo lighten-3">
-        <a href="books.php" class="brand-logo marginleft">InTime</a>
+        <a href="dashboard.php" class="brand-logo marginleft">InTime</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             
             <li><a href="home.php">Book A Ticket </a></li>
@@ -37,7 +49,7 @@ session_start();
                 </thead>
                 <tbody>
                     <?php    
-                    $sql = "SELECT * FROM books";
+                    $sql = "SELECT * FROM books WHERE `number` = '$id'";
                     $result = mysqli_query($conn , $sql);
                     while($row = mysqli_fetch_assoc($result)){
                         $num = $row['number'];
