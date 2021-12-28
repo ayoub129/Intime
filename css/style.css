@@ -1,5 +1,37 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap");
 
+.text-primary {
+  color: #392e2a;
+}
+
+.bg-primary {
+  background-color: #392e2a;
+  transition: 0.6s;
+}
+
+button.bg-primary:hover,
+button.bg-primary:active,
+button.bg-primary:focus {
+  background-color: #3a3837 !important;
+  transition: 0.6s;
+}
+
+.bg-secondary {
+  background-color: #e2ad16 !important;
+}
+
+nav .brand-logo {
+  top: -30px;
+}
+
+.logo {
+  width: 120px;
+}
+
+.bg-fourth {
+  background-color: #2faef8;
+}
+
 body {
   font-family: "Poppins", sans-serif;
 }
@@ -25,4 +57,14 @@ body {
 
 .mt-3 {
   margin-top: 2em !important;
+}
+
+.d-flex {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.ms-2 {
+  margin-left: 1em;
 }

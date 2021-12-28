@@ -33,8 +33,9 @@
                 } 
                 else {
                     $sql = "INSERT INTO `books` (  `number` , `place` ) VALUES ( '$number', '$place')";
-                    if(mysqli_query($conn , $sql)){
-                        header("Location: books.php");
+                    $sql2 = "INSERT INTO `err` (`number`) VALUES ( '$number')";
+                    if(mysqli_query($conn , $sql) && mysqli_query($conn , $sql2)){
+                        header("Location: paper.php");
                     }
                 }
         }
@@ -55,8 +56,10 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <nav class=" indigo lighten-3">
-        <a href="#" class="brand-logo marginleft">InTime</a>
+    <nav class="bg-primary">
+    <a href="dashboard.php" class="brand-logo  marginleft">
+            <img src="logo.png" alt="" class="logo">
+        </a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             
             <li><a href="home.php">Book A Ticket </a></li>
@@ -68,7 +71,7 @@
     <div class="row margintop">
     <div class="col s1 m3 l4"></div>
     <form method="POST" class="col s10 m6 l4 card">
-        <h5 class="center-align indigo-text"> Book A Ticket</h5>
+        <h5 class="center-align text-primary"> Book A Ticket</h5>
       <div class="row ">
       <div class="input-field col s12">
             <select name="number">
@@ -91,7 +94,7 @@
       <div class="row">
           <div class="col s5"></div>
           <div class="col s2">
-              <button name="book" type="submit" class="btn indigo lighten-2">Book </button>
+              <button name="book" type="submit" class="btn bg-primary lighten-2">Book </button>
           </div>
           <div class="col s5"></div>
       </div>

@@ -48,23 +48,25 @@ if(isset($_POST['logout'])){
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-     <nav class=" indigo lighten-3">
-            <a href="dashboard.php" class="brand-logo marginleft">InTime</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                
-                <li><a href="transport.php">Add Trans </a></li>
-                <li>
-                    <form  method="POST">
-                        <button name="logout" class="marginright btn indigo lighten-1" type="submit" >Log out</button>
-                    </form>
-                </li>
-            </ul>
+<nav class="bg-primary">
+        <a href="dashboard.php" class="brand-logo  marginleft">
+            <img src="logo.png" alt="" class="logo">
+        </a>
+        <ul id="nav-mobile" class="right  hide-on-med-and-down">
+            
+            <li><a href="transport.php">Add Trans </a></li>
+            <li>
+                <form  method="POST">
+                    <button name="logout" class="marginright btn bg-secondary waves-effect waves-light" type="submit" >Log out</button>
+                </form>
+            </li>
+        </ul>
     </nav>
 
     <div class="row margintop">
     <div class="col s1 m3 l4"></div>
     <form method="POST" class="col s10 m6 l4 card">
-        <h5 class="center-align indigo-text"> Add Transport </h5>
+        <h5 class="center-align text-primary"> Add Transport </h5>
       <div class="row ">
         <div class="input-field col s12">
           <input name="number" id="Author" type="text">
@@ -80,7 +82,7 @@ if(isset($_POST['logout'])){
       <div class="row">
           <div class="col s5"></div>
           <div class="col s2">
-              <button name="Add" type="submit" class="btn indigo lighten-2">Add_Trans </button>
+              <button name="Add" type="submit" class="btn bg-secondary lighten-2">Add_Trans </button>
           </div>
           <div class="col s5"></div>
       </div>

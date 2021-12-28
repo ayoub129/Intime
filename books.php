@@ -26,18 +26,24 @@ $id = $_GET['id'];
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-<nav class=" indigo lighten-3">
-        <a href="dashboard.php" class="brand-logo marginleft">InTime</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+<nav class="bg-primary">
+        <a href="dashboard.php" class="brand-logo  marginleft">
+            <img src="logo.png" alt="" class="logo">
+        </a>
+        <ul id="nav-mobile" class="right  hide-on-med-and-down">
             
-            <li><a href="home.php">Book A Ticket </a></li>
-            <li><a href="index.php">Admin </a></li>
+            <li><a href="transport.php">Add Trans </a></li>
+            <li>
+                <form  method="POST">
+                    <button name="logout" class="marginright btn bg-secondary waves-effect waves-light" type="submit" >Log out</button>
+                </form>
+            </li>
         </ul>
     </nav>
     <div class="row margintop">
         <div class="col s1  "></div>
         <div class="col s10  ">
-            <table class="centered responsive-table highlight striped">
+            <table class="centered responsive-table bg-primary white-text highlight striped">
                 <thead>
                     <tr>
                         <th>Number</th>
@@ -83,7 +89,7 @@ $id = $_GET['id'];
                                     </td>
                                     <td>
                                        <div >
-                                            <a href="paper.php?id=<?php echo $row['id']; ?>" class="btn green darken-1">print</a>
+                                            <a href="paper.php?id=<?php echo $row['id']; ?>" class="btn bg-secondary darken-1">print</a>
                                         </div>
                                     </td>
                                 </tr>

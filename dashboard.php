@@ -15,11 +15,11 @@ if(isset($_POST['logout'])){
 if(isset($_POST['deletBook'])){
     $idtodelete = $_POST["id"];
     $time =  date("h:i:s");
+    $sql = "DELETE FROM err WHERE `number` = '$idtodelete'";
     $sql2 = "UPDATE `places` SET `time` = '$time' WHERE `places`.`number_trans` = '$idtodelete'";
-   mysqli_query($conn , $sql2); 
+     mysqli_query($conn , $sql); 
+     mysqli_query($conn , $sql2); 
 }
-
-
 
 ?>
 <!DOCTYPE html>
@@ -32,27 +32,45 @@ if(isset($_POST['deletBook'])){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
 </head>
 <body>
-    <nav class=" indigo lighten-3">
-        <a href="dashboard.php" class="brand-logo marginleft">InTime</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+   
+    <nav class="bg-primary">
+        <a href="dashboard.php" class="brand-logo  marginleft">
+            <img src="logo.png" alt="" class="logo">
+        </a>
+        <ul id="nav-mobile" class="right  hide-on-med-and-down">
             
             <li><a href="transport.php">Add Trans </a></li>
             <li>
                 <form  method="POST">
-                    <button name="logout" class="marginright btn indigo lighten-1" type="submit" >Log out</button>
+                    <button name="logout" class="marginright btn bg-secondary waves-effect waves-light" type="submit" >Log out</button>
                 </form>
             </li>
         </ul>
     </nav>
     <div class="row margintop">
+    <div class="col s1"></div>
+    <div class="col s8">
+        <div class="text-primary">
+            <?php   
+            $sql = "SELECT * FROM `err`";
+            $result = mysqli_query($conn , $sql);
+            while($row = mysqli_fetch_assoc($result)){
+            ?>
+             Send The Transe Number <?php echo $row['number'] ?>    
+            <?php 
+            }
+            ?>
         </div>
+    </div>
+    </div>
     </div>
     <div class="row margintop">
         <div class="col s1  "></div>
         <div class="col s10  ">
-            <table class="centered responsive-table highlight striped indigo  white-text">
+            <table class="centered white-text responsive-table highlight striped bg-primary">
                 <thead>
                     <tr>
                         <th>Number</th>
@@ -74,20 +92,51 @@ if(isset($_POST['deletBook'])){
                         ?>
                        
                                 <tr>
-                                    <td><?php echo $row['number']; ?></td>
-                                    <td><?php echo $row['max']; ?></td>
-                                    <td><?php echo $row['size']; ?></td>
-                                   
-                                    <td>
-                                        <form method="POST" >
-                                            <input type="hidden" name="id" value="<?php echo $row['number']; ?>">
-                                            <button type='submit' name="deletBook" class="btn send waves-effect waves-light red darken-1" >
-                                                send 
-                                            </button>
-                                            <a href="books.php?id=<?php echo $row['number'] ?>" class="btn blue-text waves-effect waves-light white darken-1" >more</a>
-                                        </form>
+                                    <td ><?php echo $row['number']; ?></td>
+                                    <td ><?php echo $row['max']; ?></td>
+                                    <td ><?php
+                                      $time_start = $row2['time'];
+                                      $endTime = strtotime("+60 minutes", strtotime($time_start));
+                                      if(  date('h:i:s' ,$endTime) < date('h:i:s' , time())){  
+                                          $sql4 = "UPDATE `transport` SET `size` = 0 WHERE `transport`.`number` = '$id2'";
+                                          mysqli_query($conn , $sql4 );
+                                      }
+                                      echo $row['size']; ?>
+                                      </td>
+
+                                    <td class="d-flex ">
+                                    <?php   
+                                        $sql3 = "SELECT * FROM `err`";
+                                        $result3 = mysqli_query($conn , $sql3);
+                                        while($row3 = mysqli_fetch_assoc($result3)){
+                                        ?>
+                                           <form method="POST" >
+                                                <input type="hidden" name="id" value="<?php echo $row['number']; ?>">
+                                                <button type='submit' name="deletBook" class="btn send waves-effect waves-light bg-primary darken-1" >
+                                                    send 
+                                                </button>
+                                            </form>
+                                        <?php 
+                                        }
+                                    ?>
+                                     <?php
+                                     
+                                        if(  date('h:i:s' ,$endTime) < date('h:i:s' , time())){ 
+                                        ?>
+                                            <form method="POST" >
+                                                <input type="hidden" name="id" value="<?php echo $row['number']; ?>">
+                                                <button type='submit' name="deletBook" class="btn send waves-effect waves-light bg-primary darken-1" >
+                                                    send 
+                                                </button>
+                                            </form>
+                                       <?php   } else if (isset($_POST['deletBook']) ) { ?>
+                                                 <button type='submit'  class="btn disabled black-text" >
+                                                    Trans On The Road 
+                                                </button>
+                                      <?php } ?>
+                                     <a href="books.php?id=<?php echo $row['number'] ?>" class="btn ms-2  blue-text waves-effect waves-light white darken-1" >more</a>
                                     </td>
-                                            <td><?php
+                                            <td ><?php
                                              if($row['size'] == $row['max']){ echo " <button  class='btn blue darken-2  waves-effect waves-light'>Full </button>";}
                                              else if ($row['size'] < $row['max']){ echo " <button  class='btn green darken-2  waves-effect waves-light'>Still Places </button>";}
                                              else {echo " <button  class='btn red darken-2  waves-effect waves-light'>something wrong</button>";}
@@ -97,9 +146,6 @@ if(isset($_POST['deletBook'])){
                     <?php } }?>
                 </tbody>
             </table>
-
-          
-           
         </div>
         <div class="col s1 "></div>
 

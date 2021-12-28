@@ -65,7 +65,7 @@
 <div class="row margin">
     <div class="col s1 m3 l4"></div>
     <form method="POST" class="col s10 m6 l4 card">
-        <h5 class="center-align indigo-text">Login</h5>
+        <h5 class="center-align text-primary">Login</h5>
         <div class="row">
           <div class="input-field col s12">
             <input name="email" id="email" type="text">
@@ -85,7 +85,7 @@
       <div class="row">
           <div class="col s5"></div>
           <div class="col s2">
-              <button type="submit" name="login" class="btn indigo lighten-2">Login</button>
+              <button type="submit" name="login" class="btn bg-primary lighten-2">Login</button>
           </div>
           <div class="col s5"></div>
       </div>
